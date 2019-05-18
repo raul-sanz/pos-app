@@ -1,0 +1,155 @@
+<template>
+  <q-page padding>
+    <div class="row">
+      <div class="col-4">
+        <q-input bottom-slots v-model="username" readonly>
+        <template v-slot:before>
+          <q-avatar>
+            <img src="https://img.icons8.com/bubbles/50/000000/administrator-male.png">
+          </q-avatar>
+        </template>
+        <template v-slot:hint>
+          Usuario
+        </template>
+      </q-input>
+      </div>
+      <div class="col-3 offset-5">
+        <q-input filled v-model="dateNow" readonly >
+          <template v-slot:prepend>
+            <q-icon name="event" />
+          </template>
+        </q-input>   
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2 offset-10">
+        <q-btn size="20px"
+          
+          color="cyan-1"
+          icon="img:https://img.icons8.com/office/16/000000/add-tag.png" 
+          @click="newproducto" />
+      </div>
+    </div>
+    <div class="q-pa-md">
+          <q-markup-table separator="cell" flat bordered>
+      <thead>
+        <tr>
+          <th class="text-left">No.</th>
+          <th class="text-right">Clave</th>
+          <th class="text-right">Producto</th>
+          <th class="text-right">Descripcion</th>
+          <th class="text-right">En Almacen</th>
+          <th class="text-right">Precio</th>
+          <th class="text-right">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(product, index) in products" :key="index">
+          <td class="text-left">{{product.id}}</td>
+          <td class="text-right">{{product.code}}</td>
+          <td class="text-right">{{product.name}}</td>
+          <td class="text-right">{{product.description}}</td>
+          <td class="text-right">{{product.stock}}</td>
+          <td class="text-right">${{product.price}}</td>
+          <td class="text-right">
+            <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteProduct(product,index)"/>
+            <q-btn round color="secondary" icon="edit" style="margin-left: 2px;"/>
+          </td>
+        </tr>
+        
+       
+      </tbody>
+    </q-markup-table>
+    </div>
+    <div>
+    
+      <new-product newProp="true"></new-product>
+      
+    </div>
+  </q-page>
+</template>
+
+<script >
+import NewProduct from "../components/NewProduct";
+import AlertComponent from "../components/Alert";
+import { date } from 'quasar'
+import { mapState, mapMutations } from "vuex";
+let timeStamp = Date.now()
+export default {
+  components:{NewProduct, AlertComponent},
+  name:'ProductsPage',
+  data(){
+    return{
+      dateNow:date.formatDate(timeStamp, 'YYYY-MM-DD'),
+      data: []
+    }
+  },
+  computed:{
+    ...mapState('datos',['user','products','token']),
+    username(){
+      return `${this.user.first_name} ${this.user.last_name}`
+    },
+  },
+  created(){
+    this.changeName('Inventario')
+    this.$axios.get(
+      '/products',
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }
+    )
+    .then(res=>{
+      console.log(res);
+      this.setProducts(res.data.data)
+    })
+  },
+  methods:{
+    ...mapMutations('datos',['setNewProd','changeName','setProducts','setRemoveProduct']),
+    newproducto(){
+      this.setNewProd(true)
+    },
+    deleteProduct(item,i){
+      this.$q.dialog({
+        title: 'Estas seguro de eliminar este producto',
+        message: `El producto (${item.name}) se eliminara de manera permanente`,
+        persistent: true,
+        cancel:true,
+        cancel:{
+          label:'Cancelar',
+          color:'red'
+        },
+        ok:{
+          color:'primary'
+        }
+      }).onOk(() => {
+        this.$axios.delete(
+          `/products/${item.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          }
+        ).then(res=>{
+          this.setRemoveProduct(i)
+          this.$q.notify({
+            color:'positive',
+            message:'Producto removido'
+          })
+        }).catch(err=>{
+          console.log(err);
+          this.$q.notify({
+            color:'negative',
+            message:'Upss algo salio mal, intenta mas tarde'
+          })
+        })
+      }).onCancel(() => {
+        console.log('>>>> Cancel')
+      })
+    }
+    
+  }
+}
+</script>
+
