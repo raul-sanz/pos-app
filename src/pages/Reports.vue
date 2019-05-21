@@ -10,7 +10,26 @@
         </template>
       </q-input>
       </div>
-      <div class="col-4 offset-4">
+      <div class="col-3 offset-1">
+        <div class="datepicker-trigger">
+              <q-input
+                label="Selecione fechas a filtrar"
+                id="datepicker"
+                :value="formatDates(dateOne, dateTwo)"
+              />
+
+              <AirbnbStyleDatepicker
+                :trigger-element-id="'datepicker'"
+                :mode="'range'"
+                :fullscreen-mobile="false"
+                :date-one="dateOne"
+                :date-two="dateTwo"
+                @date-one-selected="val => { dateOne = val }"
+                @date-two-selected="val => { dateTwo = val }"
+              />
+            </div>
+      </div>
+      <div class="col-3 offset-1">
         <q-input filled v-model="dateNow" readonly >
           <template v-slot:prepend>
             <q-icon name="event" />
@@ -18,9 +37,10 @@
         </q-input>   
       </div>
     </div>
-    <div class="row q-mt-sm" style="background-color:rgba(189, 189, 189,0.2);">
+    <!--<div class="row q-mt-sm" style="background-color:rgba(189, 189, 189,0.2);">
       <div class="row q-ml-md q-mt-sm" style="height: 45px;">
-          <div class="col-4">
+           <div class="col-8">
+            
             <q-input label="Del" filled dense v-model="dateStart" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -29,9 +49,9 @@
                   </q-popup-proxy>
                 </q-icon>
               </template>
-            </q-input>
-          </div>
-          <div class="col-4 offset-1">
+            </q-input> 
+          </div>-->
+          <!-- <div class="col-4 offset-1">
             <q-input label="Al" filled dense v-model="dateEnd" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -41,11 +61,20 @@
                 </q-icon>
               </template>
             </q-input>
-          </div>
-          <div class="col-1 offset-2">
-              <q-btn class="float-left" color="info" label="Consultar" @click="filtrar"/>  
+          </div> 
+          <div class="col-2 offset-11">
+              <q-btn  color="info" label="Consultar" @click="filtrar"/>  
           </div>
         </div>
+    </div>-->
+    <div class="row">
+      <div class="col-2 offset-10">
+        <q-btn size="20px"
+          
+          color="cyan-1"
+          icon="img:https://img.icons8.com/color/80/000000/search.png" 
+          @click="filtrar" />
+      </div>
     </div>
     <div class="q-pa-md">
           <q-markup-table separator="cell" flat bordered>
@@ -127,6 +156,7 @@
 </style>
 
 <script>
+import format from 'date-fns/format'
 import toString from '../mixins/toString'
 import { date } from 'quasar'
 import { mapState, mapMutations } from "vuex";
@@ -143,7 +173,10 @@ export default {
       payType:null,
       totalNumber:161,
       dateStart: '2019/05/01',
-      dateEnd: date.formatDate(timeStamp, 'YYYY/MM/DD')
+      dateEnd: date.formatDate(timeStamp, 'YYYY/MM/DD'),
+      dateFormat: 'D MMM YY',
+      dateOne: '',
+      dateTwo: ''
     }
   },
   created(){
@@ -183,8 +216,19 @@ export default {
       console.log('cancelar');
     },
     filtrar(){
-      console.log('filtrado');
+      console.log(`${this.dateOne}-${this.dateTwo}`);
+    },
+    formatDates(dateOne, dateTwo) {
+      let formattedDates = ''
+      if (dateOne) {
+        formattedDates = format(dateOne, this.dateFormat)
+      }
+      if (dateTwo) {
+        formattedDates += ' - ' + format(dateTwo, this.dateFormat)
+      }
+      return formattedDates
     }
+  
   }
 }
 </script>

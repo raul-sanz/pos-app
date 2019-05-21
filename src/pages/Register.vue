@@ -1,8 +1,15 @@
 <template>
 <div>
-  <div class="flex flex-center">
-    <h5 class="q-ma-sm">Registra tu empresa</h5>
-  </div>
+  <q-header elevated style="background-color:rgb(255, 253, 253);" @click="$router.push('/login')">
+  <q-toolbar class="text-primary">
+    <q-btn flat round dense icon="keyboard_backspace" />
+    <q-toolbar-title>
+        <div class="flex flex-center">
+        <p class="q-ma-sm">Registra tu empresa</p>
+      </div>
+    </q-toolbar-title>
+  </q-toolbar>
+ </q-header>
     
   <q-page padding >
     
@@ -21,11 +28,11 @@
       >
          <q-input class="q-mb-md" label="Nombre" v-model="datos.name"  dense />
 
-         <q-input class="q-mb-md" label="Direccion" v-model="datos.address"  dense />
+         <q-input class="q-mb-md" label="Dirección" v-model="datos.address"  dense />
 
-         <q-input class="q-mb-md" label="Telefono" v-model="datos.phone" type="tel" dense />
+         <q-input class="q-mb-md" label="Teléfono" v-model="datos.phone" type="tel" dense />
 
-         <q-input class="q-mb-md" label="Razon social" v-model="datos.business_name"  dense />
+         <q-input class="q-mb-md" label="Razón social" v-model="datos.business_name"  dense />
       </q-step>
 
       <q-step
@@ -38,7 +45,7 @@
 
          <q-input class="q-mb-md" label="Apellidos" v-model="datos.last_name"  dense />
 
-         <q-input class="q-mb-md" label="Telefono" v-model="datos.user_phone" type="tel" dense />
+         <q-input class="q-mb-md" label="Teléfono" v-model="datos.user_phone" type="tel" dense />
 
          <q-input class="q-mb-md" label="Edad" v-model="datos.age"  dense />
       </q-step>
@@ -65,33 +72,100 @@
       <div class="row">
         <div class="col-5">
           <q-card flat bordered class="">
-          <q-card-section>
-            <h6 class="titulo_">Datos de la empresa</h6>
+          <q-card-section style="background-color: #00BCD4;padding:0;">
+            <q-item>
+              <q-item-section avatar>
+                <q-avatar>
+                  <img src="https://img.icons8.com/bubbles/50/000000/organization.png">
+                </q-avatar>
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Empresa</q-item-label>
+                <q-item-label caption>Datos de la empresa</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-card-section>
              
           <q-separator />
           
           <q-card-section>
-            <p><span class="desc_">Nombre:</span> <span>{{datos.name}}</span></p>
-            <p><span class="desc_">Direccion:</span> <span>{{datos.address}}</span></p>
-            <p><span class="desc_">Telefono:</span> <span>{{datos.phone}}</span></p>
-            <p><span class="desc_">Razon social:</span> <span>{{datos.business_name}}</span></p>
+             <q-list separator>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Nombre</q-item-label>
+                  <q-item-label caption>{{datos.name}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Dirección</q-item-label>
+                  <q-item-label caption>{{datos.address}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Teléfono</q-item-label>
+                  <q-item-label caption>{{datos.phone}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Razón social</q-item-label>
+                  <q-item-label caption>{{datos.business_name}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
           </q-card-section>
         </q-card> 
         </div>
         <div class="col-5 offset-1">
           <q-card flat bordered class="">
-          <q-card-section>
-            <h6 class="titulo_">Datos del usuario</h6>
+          <q-card-section style="background-color: #00BCD4;padding:0;">
+            <q-item>
+              <q-item-section avatar>
+                <q-avatar>
+                  <img src="https://img.icons8.com/bubbles/50/000000/administrator-male.png">
+                </q-avatar>
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Usuario</q-item-label>
+                <q-item-label caption>Datos del usuario</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-card-section>
 
           <q-separator />
           
           <q-card-section>
-            <p><span class="desc_">Nombre:</span> <span>{{fullname}}</span></p>
-            <p><span class="desc_">Telefono:</span> <span>{{datos.user_phone}}</span></p>
-            <p><span class="desc_">Edad:</span> <span>{{datos.age}}</span></p>
-            <p><span class="desc_">Correo:</span> <span>{{datos.email}}</span></p>
+             <q-list separator>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Nombre</q-item-label>
+                  <q-item-label caption>{{fullname}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Teléfono</q-item-label>
+                  <q-item-label caption>{{datos.user_phone}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Edad</q-item-label>
+                  <q-item-label caption>{{datos.age}}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item v-ripple>
+                <q-item-section>
+                  <q-item-label overline>Correo</q-item-label>
+                  <q-item-label caption>{{datos.email}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            
           </q-card-section>
         </q-card>
           
@@ -127,7 +201,14 @@ export default {
   computed:{
     ...mapState('datos',['isLogged']),
     fullname(){
-      return `${this.datos.first_name} ${this.datos.last_name}`
+      if (this.datos.first_name == undefined ) {
+        return ''
+      }else if(this.datos.last_name == undefined){
+        return `${this.datos.first_name}`
+      }else{
+        return `${this.datos.first_name} ${this.datos.last_name}`
+      }
+      
     }
   },
   created(){
@@ -150,7 +231,7 @@ export default {
         })
       }else{
         this.$q.loading.show()
-        this.$axios.post('register',this.datos).then(res=>{
+        this.$axios.post('/register',this.datos).then(res=>{
         this.$q.loading.hide()
         console.log(res.data);
         /* this.setIsLogged(true)

@@ -30,6 +30,7 @@
               :rules="[ val => val != '' || 'Campo requierido']"
               dense 
             />
+
             <q-input 
               v-model="usr.email"  
               placeholder="Correo"  
@@ -41,7 +42,8 @@
             />
 
             <q-input 
-              v-model="usr.Password"  
+              v-model="usr.password"  
+              type="password"
               placeholder="Contraseña"  
               :rules="[ val => val != '' || 'Campo requierido']"
               dense 
@@ -59,8 +61,18 @@
             <q-input
               v-model="usr.age"
               placeholder="Edad"
+              type="number"
               dense
               :rules="[ val => val != '' || 'Campo requierido']"
+            />
+           
+            <q-select
+              filled
+              v-model="usr.role_id"
+              :options="options"
+              label="Rol de usuario"
+              emit-value
+              map-options
             />
 
             <div>
@@ -80,21 +92,55 @@ export default {
   name:'NewUser',
   data(){
     return{
-      usr:{}
+      usr:{},
+       options: [
+        {
+          label: 'Dereccion',
+          value: 1
+        },
+        {
+          label: 'Gerencia',
+          value: 2
+        },
+        {
+          label: 'Contabilidad',
+          value: 3
+        },
+        {
+          label: 'Vendedor',
+          value: 4
+        }
+      ]
     }
   },
   computed:{
-    ...mapState('datos',['showFormUser'])
+    ...mapState('datos',['showFormUser','token','user'])
   },
   methods:{
-    ...mapMutations('datos',['setNewUser']),
+    ...mapMutations('datos',['setNewUser','setAddUsers']),
     hideModal(){
       this.setNewUser(false)
     },
     CrearUsuario(){
+      this.usr.username = `${this.usr.first_name}${this.usr.last_name}`
+      this.usr.company_id = this.user.company_id
       console.log(this.usr);
-      this.setNewUser(false)
-      this.user = {}
+      this.$axios.post(
+        '/users',
+        this.usr,
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        }
+      ).then(res=>{
+        this.setAddUsers(res.data.data)
+        this.setNewUser(false)
+        this.user = {}
+      }).catch(err=>{
+
+      })
+      
     },
     clearForm(){
       this.usr = {}

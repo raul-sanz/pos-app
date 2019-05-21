@@ -17,16 +17,24 @@
         <div class="row">
           <div class="col-6">
             <div class="q-gutter-md">
+              <!-- <q-btn label="Forma de pago" class="no-shadow">
+                <q-menu>
+                  <q-list style="min-width: 100px">
+                    <q-item clickable v-close-popup>
+                      <q-item-section>New tab</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn> -->
             <q-select
               filled
               v-model="payType"
               :options="options"
-              label="Forma de epago"
+              label="Forma de pago"
+              stack-label
               color="teal"
-              clearable
-              options-selected-class="text-deep-orange"
             >
-              <template v-slot:option="scope">
+              <template v-slot:option="scope" >
                 <q-item
                   v-bind="scope.itemProps"
                   v-on="scope.itemEvents"
@@ -322,15 +330,29 @@ export default {
       this.addPro = false
     },
     removeOneProd(pro,i){
-      if (pro.size == 1) {
-        this.carrito.splice(i,1)
-      }else if(pro.size){
-        //this.carrito[i].size -1
-        pro.size -= 1
-        pro.total = pro.price*pro.size
-      }
-      console.log(pro);
-      this.$q.notify('Producto removido')
+      this.$q.dialog({
+        title: 'Estas seguro de eliminar un producto',
+        message: `Se reducirá la cantidad de el producto en venta`,
+        persistent: true,
+        cancel:true,
+        cancel:{
+          label:'Cancelar',
+          color:'red'
+        },
+        ok:{
+          color:'primary'
+        }
+      }).onOk(() => {
+        if (pro.size == 1) {
+          this.carrito.splice(i,1)
+        }else if(pro.size){
+          //this.carrito[i].size -1
+          pro.size -= 1
+          pro.total = pro.price*pro.size
+        }
+        console.log(pro);
+        this.$q.notify('Producto removido')
+      })
     },
     addOneProd(pro,i){
       pro.size += 1
@@ -342,7 +364,7 @@ export default {
   }
 }
 </script>
-<style lang="css" scoped>
+<style  lang="stylus">
 .q-select__dialog{
   width: 150px !important;
 }

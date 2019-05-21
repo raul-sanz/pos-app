@@ -5,7 +5,8 @@ module.exports = function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      'axios'
+      'axios',
+      'datepiker'
     ],
 
     css: [
@@ -58,7 +59,8 @@ module.exports = function (ctx) {
         'QStepper',
         'QStep',
         'QStepperNavigation',
-        'QBtnDropdown'
+        'QBtnDropdown',
+        'QMenu'
       ],
 
       directives: [

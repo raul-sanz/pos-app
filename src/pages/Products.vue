@@ -26,7 +26,7 @@
         <q-btn size="20px"
           
           color="cyan-1"
-          icon="img:https://img.icons8.com/office/16/000000/add-tag.png" 
+          icon="img:https://img.icons8.com/office/40/000000/add-tag.png" 
           @click="newproducto" />
       </div>
     </div>

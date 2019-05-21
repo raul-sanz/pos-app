@@ -53,6 +53,18 @@ export function setAddProducts (state,prod){
 export function setRemoveProduct (state, index) {
   state.products.splice(index, 1);
 }
+
+export function setUsers (state,usrs){
+  state.users = usrs
+}
+
+export function setAddUsers (state,usr){
+  state.users.push(usr)
+}
+
+export function setRemoveUser (state, index) {
+  state.users.splice(index, 1);
+}
 /* export function addToCar (state, pros) {
   pros.map(el=>{
     state.car.push(el)

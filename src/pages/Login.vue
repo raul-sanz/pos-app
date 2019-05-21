@@ -76,7 +76,7 @@ export default {
     }
   },
   computed:{
-    ...mapState('datos',['isLogged']),
+    ...mapState('datos',['isLogged','token']),
     validado(){
       if(this.mail != '' && this.password != ''){
         return false
@@ -86,7 +86,12 @@ export default {
     }
   },
   created(){
-    if (this.isLogged == true) {
+    if (this.isLogged === true) {
+      this.$router.push('/home')
+    }
+  },
+  mounted() {
+    if (this.token != '') {
       this.$router.push('/home')
     }
   },
@@ -100,7 +105,7 @@ export default {
       }
 
       
-      this.$axios.post('login',userData).then(res=>{
+      this.$axios.post('/login',userData).then(res=>{
         this.$q.loading.hide()
         console.log(res.data);
         this.setIsLogged(true)

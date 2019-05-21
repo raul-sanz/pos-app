@@ -40,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="(user, index) in users" :key="index">
           <td class="text-left">{{user.id}}</td>
           <td class="text-right">{{user.first_name}}</td>
           <td class="text-right">{{user.last_name}}</td>
@@ -48,7 +48,7 @@
           <td class="text-right">{{user.email}}</td>
           <td class="text-right">{{user.phone}}</td>
           <td class="text-right">
-            <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteUser(user)"/>
+            <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteUser(user,index)"/>
             <q-btn round color="secondary" icon="edit" style="margin-left: 2px;" />
           </td>
         </tr>
@@ -79,20 +79,32 @@ export default {
     }
   },
   computed:{
-    ...mapState('datos',['user','car','users']),
+    ...mapState('datos',['user','car','users','token']),
     username(){
       return `${this.user.first_name} ${this.user.last_name}`
     },
   },
   created(){
     this.changeName('Usuarios')
+    this.$axios.get(
+      '/users',
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`
+        }
+      }
+    )
+    .then(res=>{
+      console.log(res);
+      this.setUsers(res.data.data)
+    })
   },
   methods:{
-    ...mapMutations('datos',['setNewUser','changeName']),
+    ...mapMutations('datos',['setNewUser','changeName','setUsers','setRemoveUser']),
     newproducto(){
       this.setNewUser(true)
     },
-    deleteUser(item){
+    deleteUser(item,i){
       this.$q.dialog({
         title: 'Estas seguro de eliminar este usuario',
         message: `El usuario (${item.first_name}) se eliminara de manera permanente`,
@@ -106,7 +118,26 @@ export default {
           color:'primary'
         }
       }).onOk(() => {
-        console.log('>>>> OK')
+        this.$axios.delete(
+          `/users/${item.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`
+            }
+          }
+        ).then(res=>{
+          this.setRemoveUser(i)
+          this.$q.notify({
+            color:'positive',
+            message:'Producto removido'
+          })
+        }).catch(err=>{
+          console.log(err);
+          this.$q.notify({
+            color:'negative',
+            message:'Upss algo salio mal, intenta mas tarde'
+          })
+        })
       }).onCancel(() => {
         console.log('>>>> Cancel')
       })

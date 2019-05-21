@@ -83,7 +83,7 @@ export default {
           to:'/products'
         },
         {
-          icon: 'img:https://img.icons8.com/office/16/000000/user-group-man-man.png',
+          icon: 'img:https://img.icons8.com/dusk/64/000000/groups.png',
           label: 'Usuarios',
           separator: true,
           to:'/users'
@@ -112,7 +112,7 @@ export default {
     logout(){
       this.$q.dialog({
         title: '¿Estas seguro de cerrar sesión?',
-        message: `La seción se cerrará y algunos datos prodrian perderse`,
+        message: `La sesión se cerrará y algunos datos prodrian perderse`,
         persistent: true,
         cancel:true,
         cancel:{
