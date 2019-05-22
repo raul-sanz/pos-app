@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header color="info" elevated v-if="isLogged">
+    <q-header color="info" elevated v-if="isLogged" v-show="$router.currentRoute.fullPath != '/print'">
       <q-toolbar>
         <q-btn
           

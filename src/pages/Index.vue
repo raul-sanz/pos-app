@@ -63,9 +63,9 @@
         <q-btn color="green-13" class="float-right" icon="add_shopping_cart"  @click="addProductToList" />
       </div>
     </div>
-    <div class="q-pa-md">
-          <q-markup-table separator="cell" flat bordered>
-      <thead>
+    <div class="q-pa-md" >
+          <q-markup-table separator="cell" flat bordered >
+      <thead >
         <tr>
           <th class="text-left">No.</th>
           <th class="text-right">Clave</th>
@@ -77,7 +77,7 @@
           <th class="text-right">Opciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody >
         <tr v-for="(product, index) in carrito" :key="index">
           <td class="text-left">{{product.id}}</td>
           <td class="text-right">{{product.code}}</td>
@@ -135,10 +135,7 @@
     </div>
     <div class="row q-mt-md">
       <div class="col-3">
-        <q-btn color="primary" label="Aceptar" @click="aceptar"/>
-      </div>
-      <div class="col-3">
-        <q-btn color="secondary" label="Imprimir" @click="imprimir"/>
+        <q-btn color="primary" label="Grabar e imprimir" @click="aceptar"/>
       </div>
       <div class="col-3">
         <q-btn color="red" label="Cancelar" @click="cancelar"/>
@@ -176,12 +173,9 @@
       </q-card-actions>
       </q-card>
     </q-dialog>
-
+  
   </q-page>
 </template>
-
-<style>
-</style>
 
 <script>
 import toString from '../mixins/toString'
@@ -287,9 +281,20 @@ export default {
 
   },
   methods:{
-    ...mapMutations('datos',['changeName','addToCar','removeTocar']),
+    ...mapMutations('datos',['changeName','addToCar','removeTocar','setTicket']),
     aceptar(){
-      console.log('aceptar');
+     
+      let tick = {}
+      tick.productos = this.carrito
+
+      tick.subtotal = this.subtotal
+      tick.total = this.totalAll
+      tick.iva = this.iva
+
+      this.setTicket(tick)
+
+       this.$router.push('/print')
+
     },
     imprimir(){
       console.log('imprimir');

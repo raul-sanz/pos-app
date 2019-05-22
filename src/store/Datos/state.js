@@ -6,6 +6,7 @@ export default {
   showFormAddProduct:false,
   updateFormProduct:false,
   updateFormUser:false,
+  ticket:{},
   alert:false,
   token:'',
   car:[

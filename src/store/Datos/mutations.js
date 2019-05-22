@@ -73,6 +73,10 @@ export function setAddUsers (state,usr){
 export function setRemoveUser (state, index) {
   state.users.splice(index, 1);
 }
+
+export function setTicket (state, ticket) {
+  state.ticket = ticket
+}
 /* export function addToCar (state, pros) {
   pros.map(el=>{
     state.car.push(el)
