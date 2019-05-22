@@ -4,6 +4,8 @@ export default {
   showFormProduct:false,
   showFormUser:false,
   showFormAddProduct:false,
+  updateFormProduct:false,
+  updateFormUser:false,
   alert:false,
   token:'',
   car:[

@@ -10,8 +10,16 @@ export function setNewProd (state, prod) {
   state.showFormProduct = prod
 }
 
+export function setUpdateProd (state, prod) {
+  state.updateFormProduct = prod
+}
+
 export function setNewUser (state, user) {
   state.showFormUser = user
+}
+
+export function setUpdateUser (state, user) {
+  state.updateFormUser = user
 }
 
 export function setAddProd (state, pro) {

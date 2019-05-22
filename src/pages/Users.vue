@@ -49,7 +49,7 @@
           <td class="text-right">{{user.phone}}</td>
           <td class="text-right">
             <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteUser(user,index)"/>
-            <q-btn round color="secondary" icon="edit" style="margin-left: 2px;" />
+            <q-btn round color="secondary" icon="edit" style="margin-left: 2px;" @click="updateUser(user.id, index)"/>
           </td>
         </tr>
         
@@ -60,22 +60,25 @@
     <div>
     
       <new-user ></new-user>
-      
+      <update-user :idi="ide" :index="ind"></update-user>
     </div>
   </q-page>
 </template>
 
 <script >
+import UpdateUser from "../components//UpdateUser";
 import NewUser from "../components/NewUser";
 import { date } from 'quasar'
 import { mapState, mapMutations } from "vuex";
 let timeStamp = Date.now()
 export default {
-  components:{NewUser},
+  components:{NewUser, UpdateUser},
   name:'UserPage',
   data(){
     return{
       dateNow:date.formatDate(timeStamp, 'YYYY-MM-DD'),
+      ide:0,
+      ind:0
     }
   },
   computed:{
@@ -100,9 +103,14 @@ export default {
     })
   },
   methods:{
-    ...mapMutations('datos',['setNewUser','changeName','setUsers','setRemoveUser']),
+    ...mapMutations('datos',['setNewUser','changeName','setUsers','setRemoveUser','setUpdateUser']),
     newproducto(){
       this.setNewUser(true)
+    },
+    updateUser(id,index){
+      this.ide = id
+      this.ind = index
+      this.setUpdateUser(true)
     },
     deleteUser(item,i){
       this.$q.dialog({

@@ -53,8 +53,9 @@
           <td class="text-right">${{product.price}}</td>
           <td class="text-right">
             <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteProduct(product,index)"/>
-            <q-btn round color="secondary" icon="edit" style="margin-left: 2px;"/>
+            <q-btn round color="secondary" icon="edit" style="margin-left: 2px;" @click="editProd(product.id,index)"/>
           </td>
+          
         </tr>
         
        
@@ -64,24 +65,28 @@
     <div>
     
       <new-product newProp="true"></new-product>
-      
+      <update-product :prod="ide" :ind="ind"></update-product>
     </div>
   </q-page>
 </template>
 
 <script >
 import NewProduct from "../components/NewProduct";
+import UpdateProduct from "../components/UpdateProduct";
 import AlertComponent from "../components/Alert";
 import { date } from 'quasar'
 import { mapState, mapMutations } from "vuex";
 let timeStamp = Date.now()
 export default {
-  components:{NewProduct, AlertComponent},
+  components:{NewProduct, AlertComponent,UpdateProduct},
   name:'ProductsPage',
   data(){
     return{
       dateNow:date.formatDate(timeStamp, 'YYYY-MM-DD'),
-      data: []
+      data: [],
+      ide:0,
+      ind:0
+      
     }
   },
   computed:{
@@ -103,12 +108,19 @@ export default {
     .then(res=>{
       console.log(res);
       this.setProducts(res.data.data)
+      
     })
   },
   methods:{
-    ...mapMutations('datos',['setNewProd','changeName','setProducts','setRemoveProduct']),
+    ...mapMutations('datos',['setNewProd','changeName','setProducts','setRemoveProduct','setUpdateProd']),
     newproducto(){
       this.setNewProd(true)
+    },
+    editProd(i,inde){
+      this.ide = i
+      this.ind = inde
+      this.setUpdateProd(true)
+
     },
     deleteProduct(item,i){
       this.$q.dialog({
