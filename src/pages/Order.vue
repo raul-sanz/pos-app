@@ -5,7 +5,7 @@
         <q-input bottom-slots v-model="username" readonly>
         <template v-slot:before>
           <q-avatar>
-            <img src="https://img.icons8.com/bubbles/50/000000/administrator-male.png">
+            <img :src="user.company.logo != null ? user.company.logo : 'https://img.icons8.com/bubbles/50/000000/administrator-male.png'">
           </q-avatar>
         </template>
         <template v-slot:hint>

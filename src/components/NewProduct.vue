@@ -18,6 +18,7 @@
             class="q-gutter-md"
           >
             <q-input
+              
               v-model="prod.code"
               placeholder="Clave"
               dense
@@ -25,6 +26,7 @@
             />
 
             <q-input 
+              autofocus
               v-model="prod.name"  
               placeholder="Nombre"  
               :rules="[ val => val != '' || 'Campo requierido']"
@@ -119,6 +121,9 @@ export default {
   computed:{
     ...mapState('datos',['showFormProduct','token','user'])
   },
+  mounted() {
+    this.random()
+  },
   methods:{
     ...mapMutations('datos',['setNewProd','setAddProducts']),
     hideModal(){
@@ -157,9 +162,12 @@ export default {
     },
     random(){
       
-      let num = `${Math.random()}`
+      let num = this.aleatorio(1000,20000)
       console.log(num);
       this.prod.code = num
+    },
+    aleatorio(a,b) {
+      return Math.round(Math.random()*(b-a)+parseInt(a));
     }
   }
 }

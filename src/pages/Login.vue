@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="flex flex-center">
-    <h5 class="q-ma-sm">Inicia Sesión</h5>
+    <h5 class="q-ma-sm">Inicio de Sesión</h5>
   </div>
     
   <q-page padding class="flex flex-center">

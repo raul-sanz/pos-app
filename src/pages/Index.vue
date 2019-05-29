@@ -5,7 +5,7 @@
         <q-input bottom-slots v-model="username" readonly>
         <template v-slot:before>
           <q-avatar>
-            <img src="https://img.icons8.com/bubbles/50/000000/administrator-male.png">
+            <img :src="user.company.logo != null ? user.company.logo : 'https://img.icons8.com/bubbles/50/000000/administrator-male.png'">
           </q-avatar>
         </template>
         <template v-slot:hint>
@@ -17,15 +17,6 @@
         <div class="row">
           <div class="col-6">
             <div class="q-gutter-md">
-              <!-- <q-btn label="Forma de pago" class="no-shadow">
-                <q-menu>
-                  <q-list style="min-width: 100px">
-                    <q-item clickable v-close-popup>
-                      <q-item-section>New tab</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn> -->
             <q-select
               filled
               v-model="payType"
@@ -42,7 +33,6 @@
                   <q-item-section avatar>
                     <q-icon :name="scope.opt.icon" />
                   </q-item-section>
-                  
                 </q-item>
               </template>
             </q-select>
@@ -114,7 +104,7 @@
 
               <q-item>
                 <q-item-section>
-                  <q-item-label>Iva 16%</q-item-label>
+                  <q-item-label>IVA {{cantIva}}%</q-item-label>
                 </q-item-section>
                 <q-item-section side>
                   <q-item-label caption>${{iva}}</q-item-label>
@@ -173,7 +163,57 @@
       </q-card-actions>
       </q-card>
     </q-dialog>
-  
+    <q-dialog v-model="print">
+      <q-card>
+        <q-card-section >
+          <div class="ticket">
+            <img :src="user.company.logo" alt="">
+            <p class="centrado">TICKET DE COMPRA
+              <br>{{user.company.address}}  
+              <br>{{dateHourNow}} {{what}}<br>Orden #{{order}}</p>
+            <table class="table">
+              <thead>
+                <tr class="tr">
+                  <th class="cantidad th" style="padding-right: 5px;word-break: normal;">CANT</th>
+                  <th class="producto th">PRODUCTO</th>
+                  <th class="precio th">$$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tr" v-for="product in ticket.productos" :key="product.id">
+                  <td class="cantidad td">{{product.size}}</td>
+                  <td class="producto td">{{product.name}}</td>
+                  <td class="precio td">${{product.total}}</td>
+                </tr>
+                <tr class="tr" style="background-color: #e0e0e0;">
+                  <td class="cantidad td"></td>
+                  <td class="producto td">Subtotal</td>
+                  <td class="precio td">${{ticket.subtotal}}</td>
+                </tr>
+                <tr class="tr" style="background-color: #e0e0e0;">
+                  <td class=" td"></td>
+                  <td class=" td">IVA</td>
+                  <td class=" td">${{ticket.iva}}</td>
+                </tr>
+                <tr class="tr" style="background-color: #e0e0e0;">
+                  <td class=" td"></td>
+                  <td class=" td">TOTAL</td>
+                  <td class=" td">${{ticket.total}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="centrado">¡GRACIAS POR SU COMPRA!</p>
+          </div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancelar" color="negative" v-close-popup />
+          <q-btn flat label="Aceptar" @click="saveSale" color="positive" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -188,28 +228,14 @@ export default {
   name: 'PageIndex',
   data(){
     return {
-      dateNow: date.formatDate(timeStamp, 'YYYY-MM-DD'),
+     dateNow: date.formatDate(timeStamp, 'YYYY-MM-DD'),
+     dateHourNow: date.formatDate(timeStamp, 'YYYY-MM-DD HH:MM:SS'),
      options: [
-        {
-          
-          icon: 'img:https://img.icons8.com/color/48/000000/paypal.png'
-        },
-        {
-          
-          icon: 'img:https://img.icons8.com/color/48/000000/mastercard-credit-card.png'
-        },
-        {
-          
-          icon: 'img:https://img.icons8.com/color/48/000000/visa.png'
-        },
-        {
-         
-          icon: 'img:https://img.icons8.com/office/16/000000/bitcoin.png'
-        },
-        {
-          
-          icon: 'img:https://img.icons8.com/color/48/000000/cash-.png'
-        }
+        {icon: 'img:https://img.icons8.com/color/48/000000/paypal.png'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/mastercard-credit-card.png'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/visa.png'},
+        {icon: 'img:https://img.icons8.com/office/16/000000/bitcoin.png'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/cash-.png'}
       ],
       pago:'',
       payType:null,
@@ -218,15 +244,7 @@ export default {
       selected: [],
       carrito: [],
       columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Producto',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
+        {name: 'name',required: true,label: 'Producto',align: 'left',field: row => row.name,format: val => `${val}`,sortable: true},
         { name: 'description', align: 'center', label: 'Descripcion', field: 'description', width:'100px'},
         { name: 'type', label: 'Tipo', field: 'type'},
         { name: 'stock', label: 'En Alamcen', field: 'stock' },
@@ -234,26 +252,50 @@ export default {
         { name: 'price', label: 'Precio', field: 'price',format: val => `$${val}` }
       ] 
       ,
-      data: []
+      data: [],
+      ticket:{},
+      print:false,
+      cantIva:0,
+      order:0
     }
   },
   created(){
     this.changeName('Venta')
     this.$axios.get(
       '/products',
-      {
-        headers: {
-          Authorization: `Bearer ${this.token}`
-        }
-      }
-    )
-    .then(res=>{
-      console.log(res);
+      {headers: {Authorization: `Bearer ${this.token}`}}
+    ).then(res=>{
       this.data = res.data.data
     })
   },
+  mounted() { //|| this.user.company.logo == null
+    if (this.user.company.iva == null) {
+      this.$q.dialog({
+        title: 'Antes de empezar',
+        message: 'Debes agregar tu logo y configurar el iva',
+        persistent: true
+      }).onOk(() => {
+        this.$router.push('/config')
+      }).onCancel(() => {
+        console.log('>>>> Cancel')
+      })
+    }else{
+      if (this.user.company.iva == 0.16) {
+        this.cantIva = 16
+      } else {
+        this.cantIva = 8
+      }
+    }
+  },
   computed:{
     ...mapState('datos',['user','car','allProducts','token']),
+    what(){
+      if(Number(date.formatDate(timeStamp,'HH')) >= 12){
+        return 'PM'
+      }else{
+        return 'AM'
+      }
+    },
     username(){
       return `${this.user.first_name} ${this.user.last_name}`
     },
@@ -270,37 +312,31 @@ export default {
       return toal
     },
     iva(){
-      return this.subtotal*0.16
+      return Math.round(this.subtotal*this.user.company.iva*100)/100;
     },
     totalAll(){
-      return this.subtotal + this.iva
-    },
-
-  },
-  watch:{
-
+      return Math.round((this.subtotal + this.iva)*100)/100;
+    }
   },
   methods:{
     ...mapMutations('datos',['changeName','addToCar','removeTocar','setTicket']),
     aceptar(){
-     
+
       let tick = {}
       tick.productos = this.carrito
-
       tick.subtotal = this.subtotal
       tick.total = this.totalAll
       tick.iva = this.iva
-
-      this.setTicket(tick)
-
-       this.$router.push('/print')
-
+      this.order = this.aleatorio(1000,10000)
+      this.ticket = tick
+      this.print = true
+       //this.setTicket(tick)
+       //this.$router.push('/print')
+       
     },
     imprimir(){
-      console.log('imprimir');
     },
     cancelar(){
-      console.log('cancelar');
     },
     removeProduct(pro,i){
       console.log(i);
@@ -310,7 +346,6 @@ export default {
     },
     closeModal(){
       this.addPro = false
-     
     },
     getSelectedString () {
       return this.selected.length === 0 ? '' : `${this.selected.length} productos ${this.selected.length > 1 ? 's' : ''} seleccionados de ${this.data.length}`
@@ -328,9 +363,6 @@ export default {
             this.$set(el,'size',1)
             this.$set(el,'total',el.price)
          }
-         
-        //el.size = 1
-        //el.total = el.price
       })
       this.addPro = false
     },
@@ -338,7 +370,6 @@ export default {
       this.$q.dialog({
         title: 'Estas seguro de eliminar un producto',
         message: `Se reducirá la cantidad de el producto en venta`,
-        persistent: true,
         cancel:true,
         cancel:{
           label:'Cancelar',
@@ -351,20 +382,64 @@ export default {
         if (pro.size == 1) {
           this.carrito.splice(i,1)
         }else if(pro.size){
-          //this.carrito[i].size -1
           pro.size -= 1
           pro.total = pro.price*pro.size
         }
-        console.log(pro);
         this.$q.notify('Producto removido')
       })
     },
     addOneProd(pro,i){
       pro.size += 1
       pro.total = pro.price*pro.size
-
-      console.log(this.carrito);
       this.$q.notify('Producto agregado')
+    },
+     saveSale(){
+       this.$q.loading.show()
+      let tick = {}
+       html2canvas(document.querySelector('.ticket')).then(canvas =>{
+        let img = canvas.toDataURL("image/png")
+        tick.ticket =  img
+        tick.company_id = this.user.company_id
+        tick.products = JSON.stringify(this.carrito)
+        tick.subtotal = this.subtotal
+        tick.total = this.totalAll
+        tick.iva = this.iva
+        tick.seller = this.username
+        tick.order = this.order
+        this.$axios.post('/sales',tick,{headers: {Authorization: `Bearer ${this.token}`}})
+          .then(res=>{
+            console.log(res.data.data);
+            this.$q.loading.hide()
+            var params = {data: res.data.data.ticket, prefix: 'ticket_', format: 'JPG', quality: 80, mediaScanner: true};
+            window.imageSaver.saveBase64Image(params,
+               (filePath)=>{
+                this.$q.dialog({
+                  title: 'Exito',
+                  message: 'Puedes encontrar el ticket listo para la impresión en tu galeria de imagenes',
+                  persistent: true
+                }).onOk(() => {
+                  console.log('>>>> OK')
+                })
+                this.carrito = {}
+              },
+              (msg)=>{
+                console.error(msg);
+              }
+            );
+          })
+          .catch(err=>{
+            this.$q.notify({
+              color:'red',
+              message:'ops, intentalo mas tarde'
+            })
+          })
+        
+      })
+      
+      
+    },
+    aleatorio(a,b) {
+      return Math.round(Math.random()*(b-a)+parseInt(a));
     }
   }
 }
@@ -372,6 +447,49 @@ export default {
 <style  lang="stylus">
 .q-select__dialog{
   width: 150px !important;
+}
+
+.td,
+.th,
+.tr,
+.table {
+  border-top: 1px solid black;
+  border-collapse: collapse;
+}
+
+td.producto,
+th.producto {
+  width: 75px;
+  max-width: 75px;
+}
+
+td.cantidad,
+th.cantidad {
+  width: 50px;
+  max-width: 50px;
+  word-break: break-all;
+}
+
+td.precio,
+th.precio {
+  width: 40px;
+  max-width: 40px;
+  word-break: break-all;
+}
+
+.centrado {
+  text-align: center;
+  align-content: center;
+}
+
+.ticket {
+  width: 155px;
+  max-width: 155px;
+}
+
+img {
+  max-width: inherit;
+  width: inherit;
 }
 </style>
 

@@ -22,17 +22,17 @@
     >
       <q-step
         :name="1"
-        title="Datos de tu empresas"
+        title="Datos de tu empresa"
         icon="settings"
         :done="step > 1"
       >
-         <q-input class="q-mb-md" label="Nombre" v-model="datos.name"  dense />
+         <q-input ref="input_0" @keyup.enter="changeInput(1)" class="q-mb-md" label="Nombre" v-model="datos.name"  dense />
 
-         <q-input class="q-mb-md" label="Dirección" v-model="datos.address"  dense />
+         <q-input ref="input_1" @keyup.enter="changeInput(2)" class="q-mb-md" label="Dirección" v-model="datos.address"  dense />
 
-         <q-input class="q-mb-md" label="Teléfono" v-model="datos.phone" type="tel" dense />
+         <q-input ref="input_2" @keyup.enter="changeInput(3)" class="q-mb-md" label="Teléfono" v-model="datos.phone" type="tel" dense />
 
-         <q-input class="q-mb-md" label="Razón social" v-model="datos.business_name"  dense />
+         <q-input ref="input_3" @keyup.enter="changeInput(4)" class="q-mb-md" label="Razón social" v-model="datos.business_name"  dense />
       </q-step>
 
       <q-step
@@ -41,13 +41,13 @@
         icon="create_new_folder"
         :done="step > 2"
       >
-        <q-input class="q-mb-md" label="Nombre" v-model="datos.first_name"  dense />
+        <q-input ref="input_4" @keyup.enter="changeInput(5)" class="q-mb-md" label="Nombre" v-model="datos.first_name"  dense />
 
-         <q-input class="q-mb-md" label="Apellidos" v-model="datos.last_name"  dense />
+         <q-input ref="input_5" @keyup.enter="changeInput(6)" class="q-mb-md" label="Apellidos" v-model="datos.last_name"  dense />
 
-         <q-input class="q-mb-md" label="Teléfono" v-model="datos.user_phone" type="tel" dense />
+         <q-input ref="input_6" @keyup.enter="changeInput(7)" class="q-mb-md" label="Teléfono" v-model="datos.user_phone" type="tel" dense />
 
-         <q-input class="q-mb-md" label="Edad" v-model="datos.age"  dense />
+         <q-input ref="input_7"  @keyup.enter="changeInput(8)" class="q-mb-md" label="Edad" v-model="datos.age"  dense />
       </q-step>
 
       <q-step
@@ -56,11 +56,11 @@
         icon="assignment"
         :done="step > 3"
       >
-        <q-input class="q-mb-md" label="Email" v-model="datos.email" type="email" dense :rules="[val => val.includes('@') || 'Verifica que el correo sea real']"/>
+        <q-input ref="input_8" @keyup.enter="changeInput(9)" class="q-mb-md" label="Correo" v-model="datos.email" type="email" dense :rules="[val => val.includes('@') || 'Verifica que el correo sea real']"/>
 
-         <q-input class="q-mb-md" label="Contraseña" v-model="datos.password" type="password" dense />
+         <q-input ref="input_9" @keyup.enter="changeInput(10)" class="q-mb-md" label="Contraseña" v-model="datos.password" type="password" dense />
 
-         <q-input class="q-mb-md" label="Confirma tu contraseña" v-model="datos.password_confirm" type="password" dense :rules="[val => val == this.datos.password || 'La contraseñas no coinciden']"/>
+         <q-input ref="input_10"  @keyup.enter="changeInput(11)" class="q-mb-md" label="Confirma tu contraseña" v-model="datos.password_confirm" type="password" dense :rules="[val => val == this.datos.password || 'La contraseñas no coinciden']"/>
 
       </q-step>
 
@@ -195,7 +195,8 @@ export default {
   data(){
     return{
       step:1,
-      datos:{}
+      datos:{},
+      inp:0
     }
   },
   computed:{
@@ -215,6 +216,9 @@ export default {
     if (this.isLogged == true) {
       this.$router.push('/home')
     }
+  },
+  mounted() {
+    this.changeInput(0)
   },
   methods: {
     ...mapMutations('datos',['setIsLogged','setUser','setToken']),
@@ -237,6 +241,11 @@ export default {
         /* this.setIsLogged(true)
         this.setUser(res.data.user[0])
         this.setToken(res.data.token.token) */
+        this.$q.notify({
+          color:'positive',
+          message:'La empresa y usuario fueron creados con exito.',
+          position: 'bottom'
+        })
         this.$router.push('/')
       }).catch(err=>{
         this.$q.loading.hide()
@@ -261,12 +270,59 @@ export default {
           })
         }, 3000); */
       }
+    },
+    changeInput(num){
+      let size = Object.keys(this.datos).length
+      if (size == num) {
+        this.inp = num
+        switch (num) {
+          case 0:
+              this.$refs.input_0.focus()
+            break;
+          case 1:
+              this.$refs.input_1.focus()
+            break;
+          case 2:
+              this.$refs.input_2.focus()
+            break;
+          case 3:
+              this.$refs.input_3.focus()
+            break;
+          case 4:
+              this.$refs.stepper.next()
+              setTimeout(() => {
+                this.$refs.input_4.focus()
+              }, 500);
+            break;
+          case 5:
+              this.$refs.input_5.focus()
+            break;  
+          case 6:
+              this.$refs.input_6.focus()
+            break;  
+          case 7:
+              this.$refs.input_7.focus()
+            break;
+          case 8:
+              this.$refs.stepper.next()
+              setTimeout(() => {
+                this.$refs.input_8.focus()
+              }, 500);
+            break;
+          case 9:
+              this.$refs.input_9.focus()
+            break;      
+          case 10:
+              this.$refs.input_10.focus()
+            break;
+          case 11:
+              this.$refs.stepper.next()
+            break;
+          default:
+            break;
+        }
+      }
       
-    
-
-      
-       
-
     }
   }
 }

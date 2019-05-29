@@ -14,6 +14,7 @@ const routes = [
       { path: 'reports', component: () => import('pages/Reports.vue'), meta: { requiresAuth: true} },
       { path: 'register', component: () => import('pages/Register.vue')},
       { path: 'print', component: () => import('pages/Print.vue'), meta: { requiresAuth: true} },
+      { path: 'config', component: () => import('pages/Config.vue'), meta: { requiresAuth: true} }
     ]
   }
 ]

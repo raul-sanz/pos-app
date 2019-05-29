@@ -1,33 +1,41 @@
 <template>
   <q-page padding>
     <div class="row">
-      <div class="col-4">
+      <div class="col-2">
         <q-input label="Usuario" bottom-slots v-model="username" readonly>
         <template v-slot:before>
           <q-avatar>
-            <img src="https://img.icons8.com/bubbles/50/000000/administrator-male.png">
+            <img :src="user.company.logo != null ? user.company.logo : 'https://img.icons8.com/bubbles/50/000000/administrator-male.png'">
           </q-avatar>
         </template>
       </q-input>
       </div>
-      <div class="col-3 offset-1">
+      <div class="col-4 offset-1">
         <div class="datepicker-trigger">
-              <q-input
-                label="Selecione fechas a filtrar"
-                id="datepicker"
-                :value="formatDates(dateOne, dateTwo)"
-              />
+          <q-input
+            label="Seleccione fechas a filtrar"
+            id="datepicker"
+            :value="formatDates(dateOne, dateTwo)"
+          />
 
-              <AirbnbStyleDatepicker
-                :trigger-element-id="'datepicker'"
-                :mode="'range'"
-                :fullscreen-mobile="false"
-                :date-one="dateOne"
-                :date-two="dateTwo"
-                @date-one-selected="val => { dateOne = val }"
-                @date-two-selected="val => { dateTwo = val }"
-              />
-            </div>
+          <AirbnbStyleDatepicker
+            :trigger-element-id="'datepicker'"
+            :mode="'range'"
+            :fullscreen-mobile="false"
+            :date-one="dateOne"
+            :date-two="dateTwo"
+            @date-one-selected="val => { dateOne = val }"
+            @date-two-selected="val => { dateTwo = val }"
+          />
+        </div>
+      </div>
+      <div class="col-1">
+        <q-btn size="15px"
+          style="margin-top: 15px;margin-left: 5px;"
+          color="white"
+          round
+          icon="img:https://img.icons8.com/color/80/000000/search.png" 
+          @click="getReport" />
       </div>
       <div class="col-3 offset-1">
         <q-input filled v-model="dateNow" readonly >
@@ -67,15 +75,15 @@
           </div>
         </div>
     </div>-->
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-2 offset-10">
         <q-btn size="20px"
           
           color="cyan-1"
           icon="img:https://img.icons8.com/color/80/000000/search.png" 
-          @click="filtrar" />
+          @click="getReport" />
       </div>
-    </div>
+    </div> -->
     <div class="q-pa-md">
           <q-markup-table separator="cell" flat bordered>
       <thead>
@@ -90,7 +98,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in car" :key="product.clave">
+        <tr v-for="product in products" :key="product.clave">
           <td class="text-left">{{product.id}}</td>
           <td class="text-right">{{product.clave}}</td>
           <td class="text-right">{{product.name}}</td>
@@ -171,6 +179,7 @@ export default {
       options:['Targeta de Credito','Efectivo','Credito','Paypal','Bitcoins'],
       pago:'',
       payType:null,
+      products:[],
       totalNumber:161,
       dateStart: '2019/05/01',
       dateEnd: date.formatDate(timeStamp, 'YYYY/MM/DD'),
@@ -227,6 +236,10 @@ export default {
         formattedDates += ' - ' + format(dateTwo, this.dateFormat)
       }
       return formattedDates
+    },
+    getReport(){
+      console.log(this.dateOne);
+      console.log(this.dateTwo);
     }
   
   }

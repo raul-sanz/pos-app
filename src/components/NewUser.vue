@@ -95,7 +95,7 @@ export default {
       usr:{},
        options: [
         {
-          label: 'Dereccion',
+          label: 'Dirección',
           value: 1
         },
         {

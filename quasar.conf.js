@@ -60,7 +60,10 @@ module.exports = function (ctx) {
         'QStep',
         'QStepperNavigation',
         'QBtnDropdown',
-        'QMenu'
+        'QMenu',
+        'QImg',
+        'QUploader',
+        'QRadio'
       ],
 
       directives: [

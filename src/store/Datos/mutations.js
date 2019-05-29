@@ -77,6 +77,10 @@ export function setRemoveUser (state, index) {
 export function setTicket (state, ticket) {
   state.ticket = ticket
 }
+
+export function setCompany (state, company) {
+  state.user.company = company
+}
 /* export function addToCar (state, pros) {
   pros.map(el=>{
     state.car.push(el)

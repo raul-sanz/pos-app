@@ -1,37 +1,37 @@
 <template>
   <div class="ticket">
-    <img src="https://yt3.ggpht.com/-3BKTe8YFlbA/AAAAAAAAAAI/AAAAAAAAAAA/ad0jqQ4IkGE/s900-c-k-no-mo-rj-c0xffffff/photo.jpg" alt="Logotipo">
+    <img :src="user.company.logo" alt="">
     <p class="centrado">TICKET DE COMPRA
-      <br>5 de mayo #1006
-      <br>23/08/2017 08:22 a.m.</p>
-    <table>
+      <br>{{user.company.address}}
+      <br>{{dateNow}} {{what}}</p>
+    <table class="table">
       <thead>
-        <tr>
-          <th class="cantidad">CANT</th>
-          <th class="producto">PRODUCTO</th>
-          <th class="precio">$$</th>
+        <tr class="tr">
+          <th class="cantidad th">CANT</th>
+          <th class="producto th">PRODUCTO</th>
+          <th class="precio th">$$</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in ticket.productos" :key="product.id">
-          <td class="cantidad">{{product.size}}</td>
-          <td class="producto">{{product.name}}</td>
-          <td class="precio">${{product.total}}</td>
+        <tr class="tr" v-for="product in ticket.productos" :key="product.id">
+          <td class="cantidad td">{{product.size}}</td>
+          <td class="producto td">{{product.name}}</td>
+          <td class="precio td">${{product.total}}</td>
         </tr>
-        <tr style="background-color: #e0e0e0;">
-          <td class="cantidad"></td>
-          <td class="producto">Subtotal</td>
-          <td class="precio">${{ticket.subtotal}}</td>
+        <tr class="tr" style="background-color: #e0e0e0;">
+          <td class="cantidad td"></td>
+          <td class="producto td">Subtotal</td>
+          <td class="precio td">${{ticket.subtotal}}</td>
         </tr>
-        <tr style="background-color: #e0e0e0;">
-          <td class=""></td>
-          <td class="">IVA</td>
-          <td class="">${{ticket.iva}}</td>
+        <tr class="tr" style="background-color: #e0e0e0;">
+          <td class=" td"></td>
+          <td class=" td">IVA</td>
+          <td class=" td">${{ticket.iva}}</td>
         </tr>
-        <tr style="background-color: #e0e0e0;">
-          <td class=""></td>
-          <td class="">TOTAL</td>
-          <td class="">${{ticket.total}}</td>
+        <tr class="tr" style="background-color: #e0e0e0;">
+          <td class=" td"></td>
+          <td class=" td">TOTAL</td>
+          <td class=" td">${{ticket.total}}</td>
         </tr>
       </tbody>
     </table>
@@ -40,39 +40,79 @@
 </template>
 
 <script>
+import { Base64 } from "js-base64";
+import { date } from 'quasar'
 import { mapMutations, mapState } from "vuex";
+let timeStamp = Date.now()
 export default {
   data(){
     return{
-
+      dateNow: date.formatDate(timeStamp, 'YYYY-MM-DD hh:mm:ss'),
+      image:''
     }
 
   },
   computed:{
-    ...mapState('datos',['ticket'])
+    ...mapState('datos',['ticket','user']),
+    what(){
+      if(Number(date.formatDate(timeStamp,'hh')) >= 12){
+        return 'PM'
+      }else{
+        return 'AM'
+      }
+    }
   },
   mounted(){
-    this.$q.loading.show({
+    console.log(Number(date.formatDate(timeStamp,'hh')));
+    /* this.$q.loading.show({
       message:'Generando ticket'
     })
-    setTimeout(() => {
-        this.$q.loading.hide()
-       window.print()
-    }, 2000);
-   
-    setTimeout(() => {
+    
+    this.$q.loading.hide() */
+       //window.print()
+
+
+      html2canvas(document.querySelector('.ticket')).then(canvas =>{
+       
+      let img =canvas.toDataURL("image/png");
+      //var doc = new jsPDF();
+      //doc.addImage(img,'JPEG',0,0);
+      //doc.output('dataurlnewwindow');
+      /* var url = 'data:application/pdf;base64,' + Base64.encode(doc.output())
+      
+      console.log(url); */
+      /* let nav = window.cordova.InAppBrowser.open(img, '_system', 'location=yes')
+
+      nav.show() */
+      //window.open(img, '_blank')
+      //doc.save('tiket.pdf');
+      var element = document.createElement('a');
+      element.setAttribute('href', img);
+      element.setAttribute('download', 'ticket.png');
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
       this.$router.push('/home')
-    }, 3000);
+      }) 
+    
+   
+    /* setTimeout(() => {
+      
+    }, 3000); */
   }
 }
 </script>
 
 <style scoped>
 
-td,
-th,
-tr,
-table {
+.td,
+.th,
+.tr,
+.table {
   border-top: 1px solid black;
   border-collapse: collapse;
 }

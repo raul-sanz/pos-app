@@ -99,6 +99,12 @@ export default {
           label: 'Generar pedido',
           separator: true,
           to:'/orders'
+        },
+        {
+          icon: 'img:https://img.icons8.com/plasticine/100/000000/automatic.png',
+          label: 'Ajustes',
+          separator: true,
+          to:'/config'
         }
       ]
     }
@@ -112,14 +118,14 @@ export default {
     logout(){
       this.$q.dialog({
         title: '¿Estas seguro de cerrar sesión?',
-        message: `La sesión se cerrará y algunos datos prodrian perderse`,
         persistent: true,
         cancel:true,
         cancel:{
-          label:'Cancelar',
+          label:'No',
           color:'red'
         },
         ok:{
+          label:'Si',
           color:'primary'
         }
       }).onOk(() => {
