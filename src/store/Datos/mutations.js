@@ -81,6 +81,16 @@ export function setTicket (state, ticket) {
 export function setCompany (state, company) {
   state.user.company = company
 }
+
+export function filterProd (state, strg) {
+  if (strg != '') {
+    state.products = state.products.filter(el=>{
+          
+      return   el.name.includes(strg)
+      
+     })
+  }
+}
 /* export function addToCar (state, pros) {
   pros.map(el=>{
     state.car.push(el)

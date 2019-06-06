@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
         <q-input bottom-slots v-model="username" readonly>
         <template v-slot:before>
           <q-avatar>
@@ -13,7 +13,15 @@
         </template>
       </q-input>
       </div>
-      <div class="col-3 offset-5">
+      <div class="col-4 offset-1">
+
+        <q-input filled v-model="strg" dense style="padding-top:15px;" @keyup="filter_products">
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+      <div class="col-3 offset-1">
         <q-input filled v-model="dateNow" readonly >
           <template v-slot:prepend>
             <q-icon name="event" />
@@ -22,6 +30,7 @@
       </div>
     </div>
     <div class="row">
+      
       <div class="col-2 offset-10">
         <q-btn size="20px"
           
@@ -34,7 +43,7 @@
           <q-markup-table separator="cell" flat bordered>
       <thead>
         <tr>
-          <th class="text-left">No.</th>
+          <th class="text-left">Nº</th>
           <th class="text-right">Clave</th>
           <th class="text-right">Producto</th>
           <th class="text-right">Descripcion</th>
@@ -45,7 +54,7 @@
       </thead>
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
-          <td class="text-left">{{product.id}}</td>
+          <td class="text-left">{{index + 1}}</td>
           <td class="text-right">{{product.code}}</td>
           <td class="text-right">{{product.name}}</td>
           <td class="text-right">{{product.description}}</td>
@@ -85,8 +94,8 @@ export default {
       dateNow:date.formatDate(timeStamp, 'YYYY-MM-DD'),
       data: [],
       ide:0,
-      ind:0
-      
+      ind:0,
+      strg:''
     }
   },
   computed:{
@@ -106,13 +115,11 @@ export default {
       }
     )
     .then(res=>{
-      console.log(res);
       this.setProducts(res.data.data)
-      
     })
   },
   methods:{
-    ...mapMutations('datos',['setNewProd','changeName','setProducts','setRemoveProduct','setUpdateProd']),
+    ...mapMutations('datos',['setNewProd','changeName','setProducts','setRemoveProduct','setUpdateProd','filterProd']),
     newproducto(){
       this.setNewProd(true)
     },
@@ -124,8 +131,8 @@ export default {
     },
     deleteProduct(item,i){
       this.$q.dialog({
-        title: 'Estas seguro de eliminar este producto',
-        message: `El producto (${item.name}) se eliminara de manera permanente`,
+        title: '¿Desea eliminar este producto?',
+        message: `El producto (${item.name}) se eliminará de manera permanente`,
         persistent: true,
         cancel:true,
         cancel:{
@@ -159,8 +166,41 @@ export default {
       }).onCancel(() => {
         console.log('>>>> Cancel')
       })
+    },
+    filter_products(){
+      if (this.strg != '') {
+        //this.filterProd(this.strg)
+        this.$q.loading.show()
+         this.$axios.get(
+            `/filtro/${this.strg}`,
+            {
+              headers: {
+                Authorization: `Bearer ${this.token}`
+              }
+            }
+          )
+          .then(res=>{
+           this.$q.loading.hide()
+            this.setProducts(res.data.data)
+            console.log(res.data.data)
+          })
+      } else {
+        this.$q.loading.show()
+         this.$axios.get(
+            '/products',
+            {
+              headers: {
+                Authorization: `Bearer ${this.token}`
+              }
+            }
+          )
+          .then(res=>{
+           this.$q.loading.hide()
+            this.setProducts(res.data.data)
+          })
+      }
+      
     }
-    
   }
 }
 </script>

@@ -21,13 +21,13 @@
               v-model="usr.first_name"
               placeholder="Nombre"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
 
             <q-input 
               v-model="usr.last_name"  
               placeholder="Apellidos"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -35,7 +35,7 @@
               v-model="usr.email"  
               placeholder="Correo"  
               :rules="[ 
-                val => val != '' || 'Campo requierido',
+                val => val != '' || 'Campo requerido',
                 val => val.includes('@')  || 'Debe ser un correo'
                 ]"
               dense 
@@ -44,7 +44,7 @@
             <q-input 
               v-model="usr.address" 
               placeholder="Dirección"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -52,7 +52,7 @@
               v-model="usr.phone"  
               placeholder="Teléfono" 
               type="number" 
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -62,7 +62,7 @@
               placeholder="Edad"
               type="number"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
            
             <q-select
@@ -75,7 +75,7 @@
             />
 
             <div>
-              <q-btn label="Crear" type="submit" color="primary"/>
+              <q-btn label="Guardar" type="submit" color="primary"/>
               
                <q-btn label="Regresar" @click="back" type="reset" color="secondary" flat class="q-ml-sm" />
             </div>
@@ -147,7 +147,7 @@ export default {
             message:'Usuario actualizado'
           })
         this.setRemoveUser(this.index)
-        this.setAddUsers(res.data.data)
+        this.setAddUsers(res.data.data[0])
         this.setUpdateUser(false)
       }).catch(err=>{
         this.$q.notify({

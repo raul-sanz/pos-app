@@ -21,13 +21,13 @@
               v-model="usr.first_name"
               placeholder="Nombre"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
 
             <q-input 
               v-model="usr.last_name"  
               placeholder="Apellidos"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -35,7 +35,7 @@
               v-model="usr.email"  
               placeholder="Correo"  
               :rules="[ 
-                val => val != '' || 'Campo requierido',
+                val => val != '' || 'Campo requerido',
                 val => val.includes('@')  || 'Debe ser un correo'
                 ]"
               dense 
@@ -45,7 +45,7 @@
               v-model="usr.password"  
               type="password"
               placeholder="Contraseña"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -53,7 +53,7 @@
               v-model="usr.phone"  
               placeholder="Teléfono" 
               type="number" 
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -63,7 +63,7 @@
               placeholder="Edad"
               type="number"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
            
             <q-select
@@ -124,7 +124,7 @@ export default {
     CrearUsuario(){
       this.usr.username = `${this.usr.first_name}${this.usr.last_name}`
       this.usr.company_id = this.user.company_id
-      console.log(this.usr);
+      //console.log(this.usr);
       this.$axios.post(
         '/users',
         this.usr,
@@ -134,9 +134,10 @@ export default {
           }
         }
       ).then(res=>{
-        this.setAddUsers(res.data.data)
+        console.log(res.data.data[0]);
+        this.setAddUsers(res.data.data[0])
         this.setNewUser(false)
-        this.user = {}
+        this.usr = {}
       }).catch(err=>{
 
       })

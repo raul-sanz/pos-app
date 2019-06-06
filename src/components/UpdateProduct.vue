@@ -21,47 +21,47 @@
               v-model="product.code"
               placeholder="Clave"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
 
             <q-input 
               v-model="product.name"  
               placeholder="Nombre"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
             <q-input 
               v-model="product.brand"  
               placeholder="Marca"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
             <q-input 
               v-model="product.description"  
               placeholder="Descripcion"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
             <q-input 
               v-model="product.type"  
               placeholder="Tipo"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
             <q-input 
               v-model="product.model"  
               placeholder="Modelo"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
             <q-input 
               v-model="product.color"  
               placeholder="Color"  
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
               dense 
             />
 
@@ -71,7 +71,7 @@
               placeholder="Precio"
               type="number"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
 
             <q-input
@@ -79,7 +79,7 @@
               placeholder="En almacen"
               type="number"
               dense
-              :rules="[ val => val != '' || 'Campo requierido']"
+              :rules="[ val => val != '' || 'Campo requerido']"
             />
 
             <div class="row">

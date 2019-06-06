@@ -243,7 +243,7 @@ export default {
         this.setToken(res.data.token.token) */
         this.$q.notify({
           color:'positive',
-          message:'La empresa y usuario fueron creados con exito.',
+          message:'La empresa y usuario fueron creados con éxito.',
           position: 'bottom'
         })
         this.$router.push('/')
@@ -251,7 +251,7 @@ export default {
         this.$q.loading.hide()
         this.$q.notify({
           color:'negative',
-          message:err.response.data.message,
+          message:'El correo que intentas usar ya esta en uso',
           position: 'bottom'
         })
       }) 

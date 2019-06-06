@@ -61,7 +61,7 @@
           
 
           <div>
-            <q-btn label="Enviar" type="submit" color="primary"/>
+            <q-btn label="Aceptar" type="submit" color="primary"/>
           </div>
         </q-form>
       </div>
@@ -133,7 +133,7 @@ export default {
     },
     factoryFn(){
       return {
-        url: 'http://127.0.0.1:3333/logo',
+        url: 'https://pos-api-test.herokuapp.com/logo',
         method: 'POST',
         fieldName:'profile_pic',
         headers:[{name: 'Authorization', value: `Bearer ${this.token}`}]

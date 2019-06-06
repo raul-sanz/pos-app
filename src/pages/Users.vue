@@ -30,7 +30,7 @@
           <q-markup-table separator="cell" flat bordered>
       <thead>
         <tr>
-          <th class="text-left">ID</th>
+          <th class="text-left">Nº</th>
           <th class="text-right">Nombre</th>
           <th class="text-right">Apellidos</th>
           <th class="text-right">Rol</th>
@@ -41,7 +41,7 @@
       </thead>
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
-          <td class="text-left">{{user.id}}</td>
+          <td class="text-left">{{index + 1}}</td>
           <td class="text-right">{{user.first_name}}</td>
           <td class="text-right">{{user.last_name}}</td>
           <td class="text-right">{{user.role.name}}</td>
@@ -114,8 +114,8 @@ export default {
     },
     deleteUser(item,i){
       this.$q.dialog({
-        title: 'Estas seguro de eliminar este usuario',
-        message: `El usuario (${item.first_name}) se eliminara de manera permanente`,
+        title: '¿Desea eliminar este usuario?',
+        message: `El usuario (${item.first_name}) se eliminará de manera permanente`,
         persistent: true,
         cancel:true,
         cancel:{
@@ -137,7 +137,7 @@ export default {
           this.setRemoveUser(i)
           this.$q.notify({
             color:'positive',
-            message:'Producto removido'
+            message:'Usuario removido'
           })
         }).catch(err=>{
           console.log(err);

@@ -1,19 +1,19 @@
 <template>
   <q-page padding>
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
         <q-input bottom-slots v-model="username" readonly>
-        <template v-slot:before>
-          <q-avatar>
-            <img :src="user.company.logo != null ? user.company.logo : 'https://img.icons8.com/bubbles/50/000000/administrator-male.png'">
-          </q-avatar>
-        </template>
-        <template v-slot:hint>
-          Usuario
-        </template>
-      </q-input>
+          <template v-slot:before>
+            <q-avatar>
+              <img :src="user.company.logo != null ? user.company.logo : 'https://img.icons8.com/bubbles/50/000000/administrator-male.png'">
+            </q-avatar>
+          </template>
+          <template v-slot:hint>
+            Usuario
+          </template>
+        </q-input>
       </div>
-      <div class="col-6 offset-2">
+      <div class="col-8 offset-1">
         <div class="row">
           <div class="col-6">
             <div class="q-gutter-md">
@@ -25,6 +25,9 @@
               stack-label
               color="teal"
             >
+              <template v-slot:prepend>
+                <q-icon :name="payType == null ? 'attach_money': payType.icon " />
+              </template>
               <template v-slot:option="scope" >
                 <q-item
                   v-bind="scope.itemProps"
@@ -54,41 +57,41 @@
       </div>
     </div>
     <div class="q-pa-md" >
-          <q-markup-table separator="cell" flat bordered >
-      <thead >
-        <tr>
-          <th class="text-left">No.</th>
-          <th class="text-right">Clave</th>
-          <th class="text-right">Producto</th>
-          <!--  <th class="text-right">Descripcion</th>-->
-          <th class="text-right">Cantidad</th>
-          <th class="text-right">Precio unitario</th>
-          <th class="text-right">Importe</th>
-          <th class="text-right">Opciones</th>
-        </tr>
-      </thead>
-      <tbody >
-        <tr v-for="(product, index) in carrito" :key="index">
-          <td class="text-left">{{product.id}}</td>
-          <td class="text-right">{{product.code}}</td>
-          <td class="text-right">{{product.name}}</td>
-         <!-- <td class="text-right">{{product.description}}</td>  -->
-          <td class="text-right">{{product.size}}</td>
-          <td class="text-right">${{product.price}}</td>
-          <td class="text-right">${{product.total}}</td>
-          <td class="text-right">
-            <q-btn round color="red" icon="highlight_off" style="margin-right: 2px;" @click="removeOneProd(product, index)"/>
-            <q-btn round color="positive" icon="add_circle_outline" style="margin-right: 2px;" @click="addOneProd(product, index)"/>
-          </td>
-        </tr>
+      <q-markup-table separator="cell" flat bordered >
+        <thead >
+          <tr>
+            <th class="text-left">Nº</th>
+            <th class="text-right">Clave</th>
+            <th class="text-right">Producto</th>
+            <!--  <th class="text-right">Descripcion</th>-->
+            <th class="text-right">Cantidad</th>
+            <th class="text-right">Precio unitario</th>
+            <th class="text-right">Importe</th>
+            <th class="text-right">Opciones</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr v-for="(product, index) in carrito" :key="index">
+            <td class="text-left">{{index + 1}}</td>
+            <td class="text-right">{{product.code}}</td>
+            <td class="text-right">{{product.name}}</td>
+          <!-- <td class="text-right">{{product.description}}</td>  -->
+            <td class="text-right">{{product.size}}</td>
+            <td class="text-right">${{product.price}}</td>
+            <td class="text-right">${{product.total}}</td>
+            <td class="text-right">
+              <q-btn round color="red" icon="highlight_off" style="margin-right: 2px;" @click="removeOneProd(product, index)"/>
+              <q-btn round color="positive" icon="add_circle_outline" style="margin-right: 2px;" @click="addOneProd(product, index)"/>
+            </td>
+          </tr>
+          
         
-       
-      </tbody>
-    </q-markup-table>
+        </tbody>
+      </q-markup-table>
     </div>
     <div class="row q-mt-lg">
       <div class="col-7">
-        <q-input filled v-model="totalString" dense readonly />
+        <q-input filled v-model="totalString" :input-style="{ fontSize: '9px' }" dense readonly />
       </div>
       <div class="col-4 offset-1 ">
         <q-card>
@@ -147,7 +150,7 @@
         <q-card-section>
           <div class="q-pa-md">
             <q-table
-              title="Treats"
+              title="Productos"
               :data="data"
               :columns="columns"
               row-key="name"
@@ -218,6 +221,7 @@
 </template>
 
 <script>
+import { Base64 } from "js-base64";
 import toString from '../mixins/toString'
 import { date } from 'quasar'
 import { mapState, mapMutations } from "vuex";
@@ -231,11 +235,11 @@ export default {
      dateNow: date.formatDate(timeStamp, 'YYYY-MM-DD'),
      dateHourNow: date.formatDate(timeStamp, 'YYYY-MM-DD HH:MM:SS'),
      options: [
-        {icon: 'img:https://img.icons8.com/color/48/000000/paypal.png'},
-        {icon: 'img:https://img.icons8.com/color/48/000000/mastercard-credit-card.png'},
-        {icon: 'img:https://img.icons8.com/color/48/000000/visa.png'},
-        {icon: 'img:https://img.icons8.com/office/16/000000/bitcoin.png'},
-        {icon: 'img:https://img.icons8.com/color/48/000000/cash-.png'}
+        {icon: 'img:https://img.icons8.com/color/48/000000/paypal.png',value:'paypal',label:'Paypal'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/mastercard-credit-card.png',value:'creditCard',label:'Tarjeta de crédito'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/visa.png',value:'debitCard',label:'Tarjeta de débito'},
+        {icon: 'img:https://img.icons8.com/office/16/000000/bitcoin.png',value:'bitcoin',label:'Bitcoin'},
+        {icon: 'img:https://img.icons8.com/color/48/000000/cash-.png',value:'cash',label:'Dinero en efectivo'}
       ],
       pago:'',
       payType:null,
@@ -330,6 +334,7 @@ export default {
       this.order = this.aleatorio(1000,10000)
       this.ticket = tick
       this.print = true
+      console.log(this.payType);
        //this.setTicket(tick)
        //this.$router.push('/print')
        
@@ -368,7 +373,7 @@ export default {
     },
     removeOneProd(pro,i){
       this.$q.dialog({
-        title: 'Estas seguro de eliminar un producto',
+        title: '¿Desea quitar el producto?',
         message: `Se reducirá la cantidad de el producto en venta`,
         cancel:true,
         cancel:{
@@ -385,22 +390,36 @@ export default {
           pro.size -= 1
           pro.total = pro.price*pro.size
         }
-        this.$q.notify('Producto removido')
+        this.$q.notify({
+          color:'negative',
+          message:'Producto removido'
+        })
       })
     },
     addOneProd(pro,i){
-      pro.size += 1
-      pro.total = pro.price*pro.size
-      this.$q.notify('Producto agregado')
+      if (pro.size < pro.stock) {
+        pro.size += 1
+        pro.total = pro.price*pro.size
+        this.$q.notify({
+          color:'positive',
+          message:'Producto agregado'
+        })
+      }else{
+        this.$q.notify({
+          color:'info',
+          message:`Solo tienes ${pro.stock} productos en almacen`
+        })
+      }
     },
      saveSale(){
        this.$q.loading.show()
       let tick = {}
        html2canvas(document.querySelector('.ticket')).then(canvas =>{
         let img = canvas.toDataURL("image/png")
+
         tick.ticket =  img
         tick.company_id = this.user.company_id
-        tick.products = JSON.stringify(this.carrito)
+        tick.products = this.carrito
         tick.subtotal = this.subtotal
         tick.total = this.totalAll
         tick.iva = this.iva
@@ -410,7 +429,7 @@ export default {
           .then(res=>{
             console.log(res.data.data);
             this.$q.loading.hide()
-            var params = {data: res.data.data.ticket, prefix: 'ticket_', format: 'JPG', quality: 80, mediaScanner: true};
+            var params = {data: res.data.data.ticket, prefix: 'ticket_', format: 'PNG', quality: 100, mediaScanner: true};
             window.imageSaver.saveBase64Image(params,
                (filePath)=>{
                 this.$q.dialog({
@@ -483,8 +502,8 @@ th.precio {
 }
 
 .ticket {
-  width: 155px;
-  max-width: 155px;
+  width: 195px;
+  max-width: 200px;
 }
 
 img {
