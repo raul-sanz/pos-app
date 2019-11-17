@@ -132,6 +132,7 @@ export default {
         this.setIsLogged(false)
         this.setToken('')
         this.setUser({})
+        localStorage.clear()
         this.$router.push('/login')
       }).onCancel(() => {
         console.log('>>>> Cancel')

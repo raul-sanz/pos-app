@@ -7,8 +7,8 @@ import datos from './Datos'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
-  //storage: window.localStorage
-  storage: localforage,
+  storage: window.localStorage,
+  //storage: localforage,
   key: 'data_app'
 })
 /*

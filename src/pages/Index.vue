@@ -36,6 +36,9 @@
                   <q-item-section avatar>
                     <q-icon :name="scope.opt.icon" />
                   </q-item-section>
+                  <q-item-section>
+                    {{scope.opt.label}}
+                  </q-item-section>
                 </q-item>
               </template>
             </q-select>
@@ -429,7 +432,11 @@ export default {
           .then(res=>{
             console.log(res.data.data);
             this.$q.loading.hide()
-            var params = {data: res.data.data.ticket, prefix: 'ticket_', format: 'PNG', quality: 100, mediaScanner: true};
+            var a = document.createElement('a');
+            a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
+            a.download = 'somefilename.jpg';
+            a.click();
+            /* var params = {data: res.data.data.ticket, prefix: 'ticket_', format: 'PNG', quality: 100, mediaScanner: true};
             window.imageSaver.saveBase64Image(params,
                (filePath)=>{
                 this.$q.dialog({
@@ -444,7 +451,7 @@ export default {
               (msg)=>{
                 console.error(msg);
               }
-            );
+            ); */
           })
           .catch(err=>{
             this.$q.notify({

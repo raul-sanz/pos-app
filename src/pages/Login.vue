@@ -111,6 +111,7 @@ export default {
         this.setIsLogged(true)
         this.setUser(res.data.user[0])
         this.setToken(res.data.token.token)
+        window.localStorage.setItem('key',res.data.token.token );
         this.$router.push('/')
       }).catch(err=>{
         this.$q.loading.hide()

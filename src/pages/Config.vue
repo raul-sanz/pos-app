@@ -17,6 +17,7 @@
         <q-radio checked v-model="iva" color="positive" val="0.08" label="0.08" />
         <q-radio v-model="iva" color="info" val="0.16" label="0.16" />
       </div>
+      
       <div class="col-12 q-mt-md">
         <q-form
           @submit="send"
@@ -61,7 +62,8 @@
           
 
           <div>
-            <q-btn label="Aceptar" type="submit" color="primary"/>
+            <q-btn label="Guardar cambios" type="submit" color="primary"/>
+            <q-btn class="q-ml-md" label="Editar datos" icon="edit" @click="edit = false" color="secondary"/>
           </div>
         </q-form>
       </div>

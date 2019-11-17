@@ -80,7 +80,7 @@
         <q-btn label="Cancelar" @click="clearOrder" color="negative"/>
       </div>
       <div class="col-2 offset-1">
-        <q-btn color="info" label="Enviar" @click="sendOrder" />
+        <q-btn color="info" label="Generar" @click="sendOrder" />
       </div>
       
     </div>
@@ -215,8 +215,8 @@ export default {
         doc.setDrawColor(0, 0, 0);
         doc.line(60,285,100,285)
         doc.line(110,285,150,285)
-
-        var myBase64 = Base64.encode(doc.output())
+        doc.save()
+        /* var myBase64 = Base64.encode(doc.output())
         
         function b64toBlob(b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
@@ -274,7 +274,7 @@ export default {
         var filename = `orden_${this.dateNow}.pdf`;
  
         savebase64AsPDF(folderpath,filename,myBase64,contentType);
-     
+      */
     },
     addProv(){
       this.$q.loading.show()

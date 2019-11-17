@@ -48,7 +48,7 @@
           <td class="text-right">{{user.email}}</td>
           <td class="text-right">{{user.phone}}</td>
           <td class="text-right">
-            <q-btn round color="red" icon="delete" style="margin-right: 2px;" @click="deleteUser(user,index)"/>
+            <q-btn  v-if="user.id != userId" round color="red" icon="delete" style="margin-right: 2px;" @click="deleteUser(user,index)"/>
             <q-btn round color="secondary" icon="edit" style="margin-left: 2px;" @click="updateUser(user.id, index)"/>
           </td>
         </tr>
@@ -78,7 +78,7 @@ export default {
     return{
       dateNow:date.formatDate(timeStamp, 'YYYY-MM-DD'),
       ide:0,
-      ind:0
+      ind:0,
     }
   },
   computed:{
@@ -86,6 +86,9 @@ export default {
     username(){
       return `${this.user.first_name} ${this.user.last_name}`
     },
+    userId(){
+      return this.user.id
+    }
   },
   created(){
     this.changeName('Usuarios')
@@ -101,6 +104,23 @@ export default {
       console.log(res);
       this.setUsers(res.data.data)
     })
+  },
+  mounted() {
+    if(this.user.role_id == 4){
+      this.$q.dialog({
+        title: 'No tienes acceso',
+        message: `To rol de ${this.user.role.name} no tiene acceso`,
+        persistent: true,
+        ok:{
+          label:'Entiendo',
+          color:'primary'
+        },
+      }).onOk(() => {
+        this.$router.push('/home')
+      }).onDismiss(()=>{
+        this.$router.push('/home')
+      })
+    }
   },
   methods:{
     ...mapMutations('datos',['setNewUser','changeName','setUsers','setRemoveUser','setUpdateUser']),

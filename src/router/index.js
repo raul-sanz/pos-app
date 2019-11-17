@@ -25,7 +25,8 @@ export default function ( { store/*, ssrContext */ }) {
 
   Router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-    const isLogged = store.state.datos.isLogged
+    const isLogged = window.localStorage.getItem('key')
+    console.log(store.state.datos)
     if ( !requiresAuth && isLogged) {
       return next('/home')
     }else if (requiresAuth && !isLogged) {

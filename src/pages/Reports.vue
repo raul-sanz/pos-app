@@ -341,9 +341,9 @@ export default {
         doc.text(`$ ${this.totalAll}`,170,292)
         doc.line(130,294,200,294)
        
-        //doc.save()
-        var myBase64 = Base64.encode(doc.output())
-        
+        doc.save()
+        //var myBase64 = Base64.encode(doc.output())
+        /* 
         function b64toBlob(b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
                 sliceSize = sliceSize || 512;
@@ -402,7 +402,7 @@ export default {
         var filename = `reporte_${this.dateOne}_${this.dateTwo}.pdf`;
 
         savebase64AsPDF(folderpath,filename,myBase64,contentType);
-     
+      */
     },
     imprimir(){
       //this.$q.loading.show()
@@ -425,7 +425,7 @@ export default {
         doc.text('TOTAL',130,292)
         doc.text(`$ ${this.totalAll}`,170,292)
         doc.line(130,294,200,294)
-        //doc.save()
+        doc.save()
         /*doc.line(130,245,200,245)
         doc.text('SUBTOTAL',130,250)
         doc.text(`$ ${this.subtotal}`,170,250)
@@ -434,7 +434,7 @@ export default {
         doc.text('TOTAL',130,262)
         doc.text(`$ ${this.totalAll}`,170,262)
         doc.line(130,264,200,264) */
-        var myBase64 = Base64.encode(doc.output())
+        /* var myBase64 = Base64.encode(doc.output())
         
         function b64toBlob(b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
@@ -490,7 +490,7 @@ export default {
         var folderpath = cordova.file.externalRootDirectory;
         var filename = `reporte_${this.dateOne}_${this.dateTwo}.pdf`;
 
-        savebase64AsPDF(folderpath,filename,myBase64,contentType);
+        savebase64AsPDF(folderpath,filename,myBase64,contentType); */
     },
     cancelar(){
       console.log('cancelar');
